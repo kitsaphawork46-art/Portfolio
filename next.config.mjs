@@ -4,6 +4,10 @@ import { PHASE_DEVELOPMENT_SERVER } from "next/constants.js";
 const sharedConfig = {
   reactStrictMode: true,
   devIndicators: false,
+  output: "export",
+  images: {
+    unoptimized: true,
+  },
 };
 
 export default function nextConfig(phase) {
