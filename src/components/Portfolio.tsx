@@ -103,15 +103,20 @@ export default function Portfolio() {
 
   useEffect(() => {
     const savedLanguage = localStorage.getItem("portfolio-language") as Language | null;
+    let languageTimer: number | undefined;
     if (savedLanguage === "th" || savedLanguage === "en") {
-      setLanguage(savedLanguage);
       document.documentElement.lang = savedLanguage;
+      languageTimer = window.setTimeout(() => setLanguage(savedLanguage), 0);
     }
     const onScroll = () => setScrolled(window.scrollY > 20);
     onScroll(); window.addEventListener("scroll", onScroll);
     const observer = new IntersectionObserver(entries => entries.forEach(entry => entry.isIntersecting && setActive(entry.target.id)), { rootMargin: "-35% 0px -55%", threshold: 0 });
     nav.forEach(item => { const el = document.getElementById(item); if (el) observer.observe(el); });
-    return () => { window.removeEventListener("scroll", onScroll); observer.disconnect(); };
+    return () => {
+      if (languageTimer !== undefined) window.clearTimeout(languageTimer);
+      window.removeEventListener("scroll", onScroll);
+      observer.disconnect();
+    };
   }, []);
 
   useEffect(() => {

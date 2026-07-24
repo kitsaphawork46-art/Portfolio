@@ -7,9 +7,13 @@ const orbitron = Orbitron({ subsets: ["latin"], variable: "--font-orbitron" });
 const prompt = Prompt({ subsets: ["thai", "latin"], weight: ["400", "500", "600", "700"], variable: "--font-prompt" });
 
 export const metadata: Metadata = {
-  title: "KITSAPHA AINPUEAI — Software Developer",
-  description: "Portfolio of Kitsapha Ainpueai, a software developer building thoughtful digital products.",
-  openGraph: { title: "KITSAPHA AINPUEAI — Software Developer", description: "Ideas into impact, one line at a time.", type: "website" },
+  title: "KITSAPHA AINPUEAI — Frontend Developer / Tester",
+  description: "Portfolio of Kitsapha Ainpueai, a fourth-year Computer Science student interested in frontend development and software testing.",
+  openGraph: {
+    title: "KITSAPHA AINPUEAI — Frontend Developer / Tester",
+    description: "A portfolio of frontend projects, software testing, activities, skills, and certifications.",
+    type: "website",
+  },
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
