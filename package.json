@@ -2,10 +2,13 @@
   "name": "space-portfolio",
   "version": "1.0.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "next dev",
     "build": "next build && node scripts/prepare-deploy.mjs",
+    "build:sites": "cross-env SITES_BUILD=1 vinext build && node scripts/prepare-sites-deploy.mjs",
     "start": "next start",
+    "start:sites": "vinext start",
     "lint": "eslint src"
   },
   "dependencies": {
@@ -13,19 +16,27 @@
     "lucide-react": "^0.468.0",
     "next": "^16.2.11",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "react-server-dom-webpack": "^19.2.8",
+    "vinext": "^1.0.0-beta.4"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.0.0",
     "@types/node": "^22.0.0",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
+    "@vitejs/plugin-react": "^6.0.4",
+    "@vitejs/plugin-rsc": "^0.5.30",
+    "cross-env": "^10.1.0",
     "eslint": "^9.39.5",
     "eslint-config-next": "^16.2.11",
     "tailwindcss": "^4.0.0",
-    "typescript": "^5.7.0"
+    "typescript": "^5.7.0",
+    "vite": "^8.1.5"
   },
   "overrides": {
+    "brace-expansion": "5.0.8",
+    "minimatch": "10.2.5",
     "postcss": "8.5.20",
     "sharp": "0.35.3"
   }

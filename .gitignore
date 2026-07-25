@@ -3,5 +3,6 @@ node_modules
 .next-dev
 out
 dist
+.vinext
 .env*
 *.log

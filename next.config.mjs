@@ -4,7 +4,7 @@ import { PHASE_DEVELOPMENT_SERVER } from "next/constants.js";
 const sharedConfig = {
   reactStrictMode: true,
   devIndicators: false,
-  output: "export",
+  ...(process.env.SITES_BUILD === "1" ? {} : { output: "export" }),
   images: {
     unoptimized: true,
   },
