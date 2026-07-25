@@ -89,16 +89,12 @@ export default function Portfolio() {
         title: "BU Cyber Fortress Challenge & Career Expo",
         insightsTitle: "Company Insights",
         insights: "กิจกรรม BU Cyber Fortress Challenge & Career Expo ทำให้ผมได้เรียนรู้ภาพรวมของสายงาน Cybersecurity มากขึ้น ทั้งเรื่องภัยคุกคามทางไซเบอร์ การนำ AI มาใช้เพื่อเพิ่มความปลอดภัย รวมถึงทักษะที่บริษัทต่าง ๆ ต้องการจากผู้สมัครงาน นอกจากนี้ยังได้พูดคุยและสอบถามข้อมูลจากบูธของบริษัทชั้นนำเกี่ยวกับตำแหน่งงาน การฝึกงาน และแนวทางการเตรียมตัวเข้าสู่สายอาชีพ ทำให้ผมเห็นเส้นทางการทำงานในอนาคตได้ชัดเจนขึ้น",
-        reflectionTitle: "Self-Reflection",
-        reflection: "หลังจากเข้าร่วมกิจกรรม ผมมองเห็นว่าสายงาน Cybersecurity ต้องใช้ความรู้หลายด้าน ทั้งระบบคอมพิวเตอร์ เครือข่าย การวิเคราะห์ปัญหา และการรักษาความปลอดภัย อีกทั้งยังต้องติดตามเทคโนโลยีและภัยคุกคามใหม่ ๆ อยู่เสมอ กิจกรรมนี้จึงทำให้ผมรู้ว่าตนเองยังต้องทบทวนพื้นฐานและฝึกปฏิบัติเพิ่มเติม เพื่อพัฒนาความสามารถและเตรียมความพร้อมสำหรับการฝึกงานหรือทำงานในสายนี้ในอนาคต",
       }
     : {
         label: "CYBERSECURITY ACTIVITY",
         title: "BU Cyber Fortress Challenge & Career Expo",
         insightsTitle: "Company Insights",
         insights: "The BU Cyber Fortress Challenge & Career Expo gave me a broader understanding of cybersecurity careers, including cyber threats, how AI can enhance security, and the skills companies seek in candidates. I also spoke with representatives at leading company booths about job opportunities, internships, and how to prepare for a career in the field, helping me see my future career path more clearly.",
-        reflectionTitle: "Self-Reflection",
-        reflection: "After participating, I realized that cybersecurity requires knowledge across multiple areas, including computer systems, networks, problem analysis, and security. It also requires continuously keeping up with new technologies and threats. This activity showed me that I still need to review the fundamentals and gain more hands-on practice to strengthen my skills and prepare for an internship or future career in cybersecurity.",
       };
 
   useEffect(() => {
@@ -301,7 +297,7 @@ export default function Portfolio() {
           <article className="showcase-content activity-content"><div className="showcase-title"><div><h3>{featuredActivity.title}</h3><span className="activity-project-label">{featuredActivity.tag}</span></div></div><div className="project-role"><span>{t.projects.role}</span><b>{activityRole}</b></div><small className="activity-meta"><MapPin />{featuredActivity.meta}</small><p>{featuredActivity.description}</p></article>
         </Reveal><Reveal className="activity-showcase">
           <div className="activity-visual activity-gallery"><AnimatePresence initial={false} custom={secondActivityDirection}><motion.div className="activity-gallery-slide" key={secondActivityIndex} custom={secondActivityDirection} variants={gallerySlideVariants} initial="enter" animate="center" exit="exit" transition={gallerySlideTransition}><Image className="activity-gallery-backdrop" src={secondActivityImages[secondActivityIndex]} alt="" fill sizes="50vw" aria-hidden="true" /><Image className="activity-gallery-image" src={secondActivityImages[secondActivityIndex]} alt={`${secondActivityContent.title} ${secondActivityIndex + 1}`} fill sizes="(max-width: 900px) 92vw, 48vw" /></motion.div></AnimatePresence><button className="activity-gallery-arrow previous" onClick={() => changeSecondActivityImage(-1)} aria-label={t.ui.previous}><ChevronLeft /></button><button className="activity-gallery-arrow next" onClick={() => changeSecondActivityImage(1)} aria-label={t.ui.next}><ChevronRight /></button><div className="activity-gallery-count">{String(secondActivityIndex + 1).padStart(2, "0")} / {secondActivityImages.length}</div></div>
-          <article className="showcase-content activity-content second-activity-content"><div className="showcase-title"><div><span>{secondActivityContent.label}</span><h3>{secondActivityContent.title}</h3></div></div><section className="activity-detail-block"><h4>{secondActivityContent.insightsTitle}</h4><p>{secondActivityContent.insights}</p></section><section className="activity-detail-block"><h4>{secondActivityContent.reflectionTitle}</h4><p>{secondActivityContent.reflection}</p></section></article>
+          <article className="showcase-content activity-content second-activity-content"><div className="showcase-title"><div><span>{secondActivityContent.label}</span><h3>{secondActivityContent.title}</h3></div></div><section className="activity-detail-block"><h4>{secondActivityContent.insightsTitle}</h4><p>{secondActivityContent.insights}</p></section></article>
         </Reveal></div>
       </section>
 
