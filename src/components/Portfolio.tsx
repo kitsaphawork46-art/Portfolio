@@ -269,6 +269,16 @@ export default function Portfolio() {
       <section id="projects" className="content-section section-shell">
         <SectionTitle eyebrow={t.sections.projects[0]} title={t.sections.projects[1]} text={t.sections.projects[2]} />
         <div className="project-showcase-grid">
+        <Reveal className="project-showcase project-placeholder">
+          <div className="project-placeholder-media" aria-hidden="true">
+            <div className="project-placeholder-mark"><Code2 /><span>01</span></div>
+          </div>
+          <article className="showcase-content">
+            <div className="showcase-title"><div><span>{language === "th" ? "โปรเจกต์ใหม่" : "NEW PROJECT"}</span><h3>{language === "th" ? "เร็ว ๆ นี้" : "Coming Soon"}</h3></div></div>
+            <p>{language === "th" ? "พื้นที่สำหรับนำเสนอโปรเจกต์ใหม่ โดยจะเพิ่มรูปภาพ รายละเอียด และเทคโนโลยีที่ใช้ในภายหลัง" : "A space reserved for a new project. Images, details, and the technology stack will be added soon."}</p>
+            <div className="showcase-tags"><span>{language === "th" ? "กำลังจัดเตรียม" : "IN PROGRESS"}</span></div>
+          </article>
+        </Reveal>
         <Reveal className="project-showcase clickable-project" role="button" tabIndex={0} ariaLabel={language === "th" ? "เปิดรายละเอียด Fishy Game" : "Open Fishy Game details"} onClick={event => { if (!(event.target as HTMLElement).closest("button, input, video, a")) setProjectModal("fishy"); }} onKeyDown={event => { if ((event.key === "Enter" || event.key === " ") && event.target === event.currentTarget) { event.preventDefault(); setProjectModal("fishy"); } }}>
           <div className="showcase-media">
             <div className="showcase-slider-stage"><AnimatePresence initial={false} custom={projectDirection}>
