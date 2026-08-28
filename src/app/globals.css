@@ -123,4 +123,74 @@ html[data-theme="light"] .contact-card:hover{background:#fff;box-shadow:0 12px 3
 html[data-theme="light"] .modal{background:rgba(15,23,42,.62)}
 html[data-theme="light"] .activity-visual-copy b{color:#f8fafc}
 html[data-theme="light"] .filters button.selected{color:#fff}
+
+/* Readability scale for user-facing content. */
+body{font-size:16px;line-height:1.6}
+.nav-wrap nav a{font-size:13px}
+.nav-resume{font-size:12px}
+.language-switch button{font-size:10px}
+.hello,.eyebrow{font-size:12px}
+.hero h2{font-size:clamp(15px,1.5vw,19px)}
+.hero-desc{font-size:16px}
+.btn{font-size:13px}
+.hero-badge{font-size:9px}
+.scroll-cue{font-size:9px}
+.section-title span{font-size:11px}
+.section-title p{font-size:16px}
+.about-copy>p,.about-bio{font-size:16px}
+.info-grid span,.profile-meta small{font-size:12px}
+.info-grid b{font-size:14px}
+.profile-label{font-size:12px}
+.profile-meta b{font-size:15px}
+.education-history article>span{font-size:12px}
+.education-history h5{font-size:16px}
+.education-history p{font-size:12px}
+.education-history p b{font-size:13px}
+.filters button{font-size:11px}
+.project-top>span,.project-body>small{font-size:10px}
+.project-body h3{font-size:18px}
+.project-body p{font-size:14px}
+.tags span{font-size:10px}
+.showcase-title span{font-size:10px}
+.showcase-title a{font-size:12px}
+.showcase-content>p{font-size:15px}
+.showcase-content ul{font-size:13px}
+.showcase-content li strong{font-size:14px}
+.showcase-tags span{font-size:10px}
+.showcase-image-count,.showcase-counter,.modal-gallery-status,.activity-gallery-count{font-size:10px}
+.project-showcase-grid .showcase-content>p{font-size:14px}
+.project-showcase-grid .showcase-content ul{font-size:13px}
+.project-showcase-grid .showcase-content li strong{font-size:14px}
+.project-showcase-grid .showcase-tags span{font-size:10px}
+.project-role span{font-size:10px}
+.project-role b{font-size:11px}
+.project-live-link{font-size:11px}
+.project-modal-copy>span{font-size:10px}
+.project-modal-copy>p{font-size:14px}
+.project-modal-copy li{font-size:13px}
+.project-modal-copy li strong{font-size:14px}
+.skill-group h3{font-size:17px}
+.skill-group div span{font-size:14px}
+.skill-group span small{font-size:10px}
+.timeline-year{font-size:12px}
+.timeline-row article>span,.experience-card span{font-size:10px}
+.timeline-row h3,.experience-card h3{font-size:16px}
+.timeline-row small,.experience-card small{font-size:11px}
+.timeline-row p,.experience-card p{font-size:13px}
+.certificate-thumbnail span{font-size:9px}
+.cert-info span{font-size:10px}
+.cert-info h3{font-size:15px}
+.cert-info p{font-size:11px}
+.activity-meta{font-size:13px}
+.activity-content>p,.activity-detail-block p{font-size:15px}
+.activity-detail-block h4{font-size:14px}
+.contact-copy>div>p{font-size:16px}
+.contact-card small{font-size:11px}
+.contact-card b{font-size:14px}
+footer p{font-size:11px}
+.footer-name{font-size:12px}
+.certificate-modal-details span{font-size:10px}
+.certificate-modal-details p{font-size:12px}
+@media(max-width:1120px) and (min-width:1001px){.nav-wrap nav a{font-size:12px;padding:0 7px}}
+@media(max-width:760px){.mobile-nav a{font-size:14px}.mobile-language button{font-size:12px}.hero-badge{font-size:8px}.showcase-title h3{font-size:20px}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
