@@ -10,12 +10,13 @@ import {
   Moon, Sparkles, Sun, X,
 } from "lucide-react";
 import { certifications, skillGroups } from "@/data/portfolio";
-import { aiTutorDetails, bankersAlgorithmDetails, featuredProjects, weightBasedInventoryDetails } from "@/data/featuredProjects";
+import { aiTutorDetails, bankersAlgorithmDetails, featuredProjects, weightBasedInventoryDetails, zenithDetails } from "@/data/featuredProjects";
 import { localizedActivities } from "@/data/localizedTimeline";
 import { Language, translations } from "@/data/translations";
 
 const nav = ["home", "about", "projects", "skills", "activities", "certifications", "contact"] as const;
 type Theme = "light" | "dark";
+const zenithImages = Array.from({ length: 10 }, (_, index) => `/projects/zenith/${index + 1}.png`);
 const projectImages = Array.from({ length: 18 }, (_, index) => `/projects/fishy-app/${index + 1}.png`);
 const activityImages = Array.from({ length: 4 }, (_, index) => `/activities/it-empowering-day-${index + 1}.png`);
 const secondActivityImages = ["/activities/cyber-expo-1.png", "/activities/cyber-expo-2.jpg"];
@@ -60,25 +61,29 @@ export default function Portfolio() {
   const [language, setLanguage] = useState<Language>("en");
   const [theme, setTheme] = useState<Theme>("dark");
   const [certificate, setCertificate] = useState<(typeof certifications)[number] | null>(null);
+  const [zenithIndex, setZenithIndex] = useState(0);
+  const [zenithDirection, setZenithDirection] = useState<-1 | 1>(1);
   const [projectIndex, setProjectIndex] = useState(0);
   const [projectDirection, setProjectDirection] = useState<-1 | 1>(1);
   const [activityIndex, setActivityIndex] = useState(0);
   const [activityDirection, setActivityDirection] = useState<-1 | 1>(1);
   const [secondActivityIndex, setSecondActivityIndex] = useState(0);
   const [secondActivityDirection, setSecondActivityDirection] = useState<-1 | 1>(1);
-  const [projectModal, setProjectModal] = useState<"fishy" | "ai-tutor" | "weight-inventory" | "bankers-algorithm" | null>(null);
+  const [projectModal, setProjectModal] = useState<"zenith" | "fishy" | "ai-tutor" | "weight-inventory" | "bankers-algorithm" | null>(null);
   const [videoPlaying, setVideoPlaying] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const aiTutorVideoRef = useRef<HTMLVideoElement>(null);
   const { scrollYProgress } = useScroll();
   const progress = useSpring(scrollYProgress, { stiffness: 120, damping: 30 });
   const t = translations[language];
+  const zenithContent = zenithDetails[language];
   const projectContent = featuredProjects[language][0];
   const aiTutorContent = aiTutorDetails[language];
   const weightInventoryContent = weightBasedInventoryDetails[language];
   const bankersContent = bankersAlgorithmDetails[language];
-  const modalProjectContent = projectModal === "fishy" ? projectContent : projectModal === "ai-tutor" ? aiTutorContent : projectModal === "weight-inventory" ? weightInventoryContent : bankersContent;
+  const modalProjectContent = projectModal === "zenith" ? zenithContent : projectModal === "fishy" ? projectContent : projectModal === "ai-tutor" ? aiTutorContent : projectModal === "weight-inventory" ? weightInventoryContent : bankersContent;
   const featuredActivity = localizedActivities[language][0];
+  const currentZenithImage = zenithImages[zenithIndex];
   const currentPreviewImage = projectImages[projectIndex];
   const certificateTitle = certificate ? (language === "th" ? certificate.titleTh : certificate.title) : "";
   const certificateIssuer = certificate ? (language === "th" ? certificate.issuerTh : certificate.issuer) : "";
@@ -149,11 +154,18 @@ export default function Portfolio() {
   }, [projectModal, certificate]);
 
   useEffect(() => {
-    const timer = window.setInterval(() => {
+    const zenithTimer = window.setInterval(() => {
+      setZenithDirection(1);
+      setZenithIndex(current => (current + 1) % zenithImages.length);
+    }, 5600);
+    const fishyTimer = window.setInterval(() => {
       setProjectDirection(1);
       setProjectIndex(current => (current + 1) % projectImages.length);
     }, 5000);
-    return () => window.clearInterval(timer);
+    return () => {
+      window.clearInterval(zenithTimer);
+      window.clearInterval(fishyTimer);
+    };
   }, [language]);
 
   useEffect(() => {
@@ -199,6 +211,11 @@ export default function Portfolio() {
     const total = projectImages.length;
     setProjectDirection(direction);
     setProjectIndex(current => (current + direction + total) % total);
+  };
+
+  const changeZenithImage = (direction: -1 | 1) => {
+    setZenithDirection(direction);
+    setZenithIndex(current => (current + direction + zenithImages.length) % zenithImages.length);
   };
 
   const changeActivityImage = (direction: -1 | 1) => {
@@ -269,15 +286,21 @@ export default function Portfolio() {
       <section id="projects" className="content-section section-shell">
         <SectionTitle eyebrow={t.sections.projects[0]} title={t.sections.projects[1]} text={t.sections.projects[2]} />
         <div className="project-showcase-grid">
-        <Reveal className="project-showcase project-placeholder">
-          <div className="project-placeholder-media" aria-hidden="true">
-            <div className="project-placeholder-mark"><Code2 /><span>01</span></div>
+        <Reveal className="project-showcase clickable-project" role="button" tabIndex={0} ariaLabel={language === "th" ? "เปิดรายละเอียดโปรเจกต์ Zenith" : "Open Zenith project details"} onClick={event => { if (!(event.target as HTMLElement).closest("button, input, video, a")) setProjectModal("zenith"); }} onKeyDown={event => { if ((event.key === "Enter" || event.key === " ") && event.target === event.currentTarget) { event.preventDefault(); setProjectModal("zenith"); } }}>
+          <div className="showcase-media">
+            <div className="showcase-slider-stage"><AnimatePresence initial={false} custom={zenithDirection}>
+              <motion.div className="sliding-preview" key={zenithIndex} custom={zenithDirection} variants={{ enter: (direction: number) => ({ x: direction > 0 ? "105%" : "-105%", opacity: .2, scale: .955, rotateY: direction > 0 ? 5 : -5 }), center: { x: 0, opacity: 1, scale: 1, rotateY: 0 }, exit: (direction: number) => ({ x: direction > 0 ? "-105%" : "105%", opacity: .2, scale: .955, rotateY: direction > 0 ? -5 : 5 }) }} initial="enter" animate="center" exit="exit" transition={{ x: { duration: .68, ease: [0.22, 1, 0.36, 1] }, opacity: { duration: .46, ease: "easeOut" }, scale: { duration: .62, ease: [0.22, 1, 0.36, 1] }, rotateY: { duration: .62, ease: [0.22, 1, 0.36, 1] } }}><div className="fishy-slide"><Image className="fishy-backdrop" src={currentZenithImage} alt="" fill sizes="900px" aria-hidden="true" /><Image className="fishy-screen" src={currentZenithImage} alt={`Zenith platform screen ${zenithIndex + 1}`} fill sizes="(max-width: 760px) 85vw, 900px" priority={zenithIndex === 0} /></div></motion.div>
+            </AnimatePresence></div>
+            <button className="showcase-arrow previous" onClick={() => changeZenithImage(-1)} aria-label={t.ui.previous}><ChevronLeft /></button>
+            <button className="showcase-arrow next" onClick={() => changeZenithImage(1)} aria-label={t.ui.next}><ChevronRight /></button>
+            <div className="showcase-image-count" aria-live="polite">{String(zenithIndex + 1).padStart(2, "0")} / {zenithImages.length}</div>
           </div>
-          <article className="showcase-content">
-            <div className="showcase-title"><div><span>{language === "th" ? "โปรเจกต์ใหม่" : "NEW PROJECT"}</span><h3>{language === "th" ? "เร็ว ๆ นี้" : "Coming Soon"}</h3></div></div>
-            <p>{language === "th" ? "พื้นที่สำหรับนำเสนอโปรเจกต์ใหม่ โดยจะเพิ่มรูปภาพ รายละเอียด และเทคโนโลยีที่ใช้ในภายหลัง" : "A space reserved for a new project. Images, details, and the technology stack will be added soon."}</p>
-            <div className="showcase-tags"><span>{language === "th" ? "กำลังจัดเตรียม" : "IN PROGRESS"}</span></div>
-          </article>
+          <motion.article key={`zenith-content-${language}`} className="showcase-content" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}>
+            <div className="showcase-title"><div><span>{zenithContent.label}</span><h3>{zenithContent.title}</h3></div></div>
+            <p>{zenithContent.description}</p>
+            <ul>{zenithContent.highlights.map(item => <li key={item.title}><strong>{item.title}</strong><span>{item.text}</span></li>)}</ul>
+            <div className="showcase-tags">{zenithContent.tags.map(tag => <span key={tag}>{tag}</span>)}</div>
+          </motion.article>
         </Reveal>
         <Reveal className="project-showcase clickable-project" role="button" tabIndex={0} ariaLabel={language === "th" ? "เปิดรายละเอียด Fishy Game" : "Open Fishy Game details"} onClick={event => { if (!(event.target as HTMLElement).closest("button, input, video, a")) setProjectModal("fishy"); }} onKeyDown={event => { if ((event.key === "Enter" || event.key === " ") && event.target === event.currentTarget) { event.preventDefault(); setProjectModal("fishy"); } }}>
           <div className="showcase-media">
@@ -365,8 +388,8 @@ export default function Portfolio() {
 
     <AnimatePresence>{certificate && <motion.div className="modal" role="dialog" aria-modal="true" aria-label={certificateTitle} onClick={() => setCertificate(null)} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}><motion.div className="modal-content certificate-modal-content" onClick={e => e.stopPropagation()} initial={{ opacity: 0, scale: .94 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: .96 }}><button onClick={() => setCertificate(null)} aria-label={t.ui.close}><X /></button><div className="certificate-modal-image"><Image src={certificate.image} alt={`${certificateTitle} ${t.ui.certificate}`} fill sizes="95vw" priority /></div><div className="certificate-modal-details"><span>{certificateDate}</span><h2>{certificateTitle}</h2><p>{certificateIssuer} · {certificate.code}</p></div></motion.div></motion.div>}</AnimatePresence>
     <AnimatePresence>{projectModal && <motion.div className="modal project-detail-modal" role="dialog" aria-modal="true" aria-label={modalProjectContent.title} onClick={() => setProjectModal(null)} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}><motion.div className="project-modal-content" onClick={event => event.stopPropagation()} initial={{ opacity: 0, y: 30, scale: .97 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 20, scale: .98 }} transition={{ duration: .32, ease: [0.22, 1, 0.36, 1] }}><button className="project-modal-close" onClick={() => setProjectModal(null)} aria-label={t.ui.closeProject}><X /></button><div className="project-modal-layout">
-      <div className="project-modal-media">{projectModal === "fishy" ? <><AnimatePresence initial={false} custom={projectDirection}><motion.div className="modal-gallery-slide" key={projectIndex} custom={projectDirection} variants={gallerySlideVariants} initial="enter" animate="center" exit="exit" transition={gallerySlideTransition}><Image src={currentPreviewImage} alt={`${projectContent.title} ${projectIndex + 1}`} fill sizes="(max-width: 760px) 92vw, 480px" /></motion.div></AnimatePresence><button className="modal-gallery-arrow previous" onClick={() => changePreview(-1)} aria-label={t.ui.previous}><ChevronLeft /></button><button className="modal-gallery-arrow next" onClick={() => changePreview(1)} aria-label={t.ui.next}><ChevronRight /></button><div className="modal-gallery-status">{String(projectIndex + 1).padStart(2, "0")} / {projectImages.length}</div></> : <video src={projectModal === "ai-tutor" ? "/projects/ai-tutor.mp4" : projectModal === "weight-inventory" ? "/projects/weight-based-inventory.mp4" : "/projects/project-04.mp4"} controls autoPlay muted loop playsInline>{t.ui.videoFallback}</video>}</div>
-      <article className="project-modal-copy"><span>{modalProjectContent.label}</span><h2>{modalProjectContent.title}</h2>{(projectModal === "fishy" || projectModal === "ai-tutor") && <div className="project-role"><span>{t.projects.role}</span><b>{projectRole}</b></div>}<p>{modalProjectContent.description}</p>{projectModal === "fishy" ? <ul>{projectContent.highlights.map(item => { const [title, detail] = item.split("::"); return <li key={item}><strong>{title}</strong>{detail && <span>{detail}</span>}</li>; })}</ul> : projectModal === "ai-tutor" ? <ul>{aiTutorContent.highlights.map(item => <li key={item.title}><strong>{item.title}</strong><span>{item.text}</span></li>)}</ul> : projectModal === "bankers-algorithm" ? <ul>{bankersContent.highlights.map(item => <li key={item.title}><strong>{item.title}</strong><span>{item.text}</span></li>)}</ul> : null}{projectModal === "ai-tutor" && <a className="project-live-link" href="https://project-h50pr.vercel.app/" target="_blank" rel="noreferrer">{language === "th" ? "เปิดเว็บไซต์ AI Tutor" : "Visit AI Tutor"} <ExternalLink /></a>}<div className="showcase-tags">{modalProjectContent.tags.map(tag => <span key={tag}>{tag}</span>)}</div></article>
+      <div className="project-modal-media">{projectModal === "zenith" ? <><AnimatePresence initial={false} custom={zenithDirection}><motion.div className="modal-gallery-slide" key={zenithIndex} custom={zenithDirection} variants={gallerySlideVariants} initial="enter" animate="center" exit="exit" transition={gallerySlideTransition}><Image src={currentZenithImage} alt={`${zenithContent.title} ${zenithIndex + 1}`} fill sizes="(max-width: 760px) 92vw, 480px" /></motion.div></AnimatePresence><button className="modal-gallery-arrow previous" onClick={() => changeZenithImage(-1)} aria-label={t.ui.previous}><ChevronLeft /></button><button className="modal-gallery-arrow next" onClick={() => changeZenithImage(1)} aria-label={t.ui.next}><ChevronRight /></button><div className="modal-gallery-status">{String(zenithIndex + 1).padStart(2, "0")} / {zenithImages.length}</div></> : projectModal === "fishy" ? <><AnimatePresence initial={false} custom={projectDirection}><motion.div className="modal-gallery-slide" key={projectIndex} custom={projectDirection} variants={gallerySlideVariants} initial="enter" animate="center" exit="exit" transition={gallerySlideTransition}><Image src={currentPreviewImage} alt={`${projectContent.title} ${projectIndex + 1}`} fill sizes="(max-width: 760px) 92vw, 480px" /></motion.div></AnimatePresence><button className="modal-gallery-arrow previous" onClick={() => changePreview(-1)} aria-label={t.ui.previous}><ChevronLeft /></button><button className="modal-gallery-arrow next" onClick={() => changePreview(1)} aria-label={t.ui.next}><ChevronRight /></button><div className="modal-gallery-status">{String(projectIndex + 1).padStart(2, "0")} / {projectImages.length}</div></> : <video src={projectModal === "ai-tutor" ? "/projects/ai-tutor.mp4" : projectModal === "weight-inventory" ? "/projects/weight-based-inventory.mp4" : "/projects/project-04.mp4"} controls autoPlay muted loop playsInline>{t.ui.videoFallback}</video>}</div>
+      <article className="project-modal-copy"><span>{modalProjectContent.label}</span><h2>{modalProjectContent.title}</h2>{(projectModal === "fishy" || projectModal === "ai-tutor") && <div className="project-role"><span>{t.projects.role}</span><b>{projectRole}</b></div>}<p>{modalProjectContent.description}</p>{projectModal === "zenith" ? <ul>{zenithContent.highlights.map(item => <li key={item.title}><strong>{item.title}</strong><span>{item.text}</span></li>)}</ul> : projectModal === "fishy" ? <ul>{projectContent.highlights.map(item => { const [title, detail] = item.split("::"); return <li key={item}><strong>{title}</strong>{detail && <span>{detail}</span>}</li>; })}</ul> : projectModal === "ai-tutor" ? <ul>{aiTutorContent.highlights.map(item => <li key={item.title}><strong>{item.title}</strong><span>{item.text}</span></li>)}</ul> : projectModal === "bankers-algorithm" ? <ul>{bankersContent.highlights.map(item => <li key={item.title}><strong>{item.title}</strong><span>{item.text}</span></li>)}</ul> : null}{projectModal === "ai-tutor" && <a className="project-live-link" href="https://project-h50pr.vercel.app/" target="_blank" rel="noreferrer">{language === "th" ? "เปิดเว็บไซต์ AI Tutor" : "Visit AI Tutor"} <ExternalLink /></a>}<div className="showcase-tags">{modalProjectContent.tags.map(tag => <span key={tag}>{tag}</span>)}</div></article>
     </div></motion.div></motion.div>}</AnimatePresence>
   </MotionConfig>;
 }

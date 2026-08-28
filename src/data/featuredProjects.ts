@@ -23,6 +23,31 @@ export const featuredProjects: Record<Language, FeaturedProject[]> = {
   ],
 };
 
+export const zenithDetails = {
+  en: {
+    label: "FULL-STACK PLATFORM",
+    title: "Zenith — Smart-Lab Management & Computer Tracking Platform",
+    description: "A centralized platform for managing computer laboratories, including users, classrooms, computers, schedules, and reservations for devices and equipment. It works with a Windows Tracking Agent to verify users, monitor computer status, and control computer usage from a central system. The platform is designed for organizations and educational institutions that manage a large number of computers.",
+    highlights: [
+      { title: "Advance booking and walk-in access", text: "Supports advance computer reservations and walk-in usage. The system automatically checks available time slots, class schedules, conflicting reservations, and computer status, with cancellation and no-show handling." },
+      { title: "Windows Tracking Agent", text: "Verifies user identity before computer access and allows each computer to receive commands and be controlled through the web platform." },
+      { title: "Centralized administration", text: "Manages members, role-based permissions, rooms and labs, computers, equipment, class schedules, notifications, and the suspension or blocking of computers that should not be available for use." },
+    ],
+    tags: ["Next.js", "React", "TypeScript", "Tailwind CSS", "Prisma", "PostgreSQL", "C#", ".NET"],
+  },
+  th: {
+    label: "แพลตฟอร์ม FULL STACK",
+    title: "Zenith — Smart-Lab Management & Computer Tracking Platform",
+    description: "แพลตฟอร์มสำหรับบริหารจัดการห้องปฏิบัติการคอมพิวเตอร์แบบรวมศูนย์ ช่วยดูแลข้อมูลผู้ใช้งาน ห้องเรียน เครื่องคอมพิวเตอร์ ตารางเรียน รวมถึงการจองเครื่องและอุปกรณ์ต่าง ๆ ภายในระบบ โดยทำงานร่วมกับโปรแกรม Tracking Agent บน Windows เพื่อใช้ตรวจสอบผู้ใช้งาน ติดตามสถานะของเครื่อง และจัดการการใช้งานคอมพิวเตอร์จากส่วนกลาง เหมาะสำหรับองค์กรหรือสถานศึกษาที่มีเครื่องคอมพิวเตอร์จำนวนมาก",
+    highlights: [
+      { title: "ระบบจองล่วงหน้าและ Walk-in", text: "รองรับระบบจองเครื่องล่วงหน้าและการเข้าใช้งานแบบ Walk-in สามารถตรวจสอบช่วงเวลาว่าง ตารางเรียน รายการจองที่ซ้ำกัน และสถานะของเครื่องได้โดยอัตโนมัติ พร้อมระบบยกเลิกการจองและจัดการกรณีผู้ใช้งานไม่มาตามเวลาที่กำหนด" },
+      { title: "Tracking Agent สำหรับ Windows", text: "มี Tracking Agent สำหรับระบบปฏิบัติการ Windows เพื่อยืนยันตัวตนก่อนเข้าใช้งานเครื่อง รวมถึงสามารถรับคำสั่งและควบคุมการทำงานของเครื่องผ่านระบบเว็บไซต์" },
+      { title: "ระบบบริหารจัดการจากส่วนกลาง", text: "มีระบบบริหารจัดการจากส่วนกลางสำหรับจัดการข้อมูลสมาชิก กำหนดสิทธิ์การใช้งานตาม Role จัดการห้องและ Lab เครื่องคอมพิวเตอร์ อุปกรณ์ ตารางเรียน การแจ้งเตือน รวมถึงการระงับหรือ Block เครื่องที่ไม่ต้องการให้ใช้งาน" },
+    ],
+    tags: ["Next.js", "React", "TypeScript", "Tailwind CSS", "Prisma", "PostgreSQL", "C#", ".NET"],
+  },
+} as const;
+
 export const aiTutorDetails = {
   en: {
     label: "CS460 COURSE PROJECT",
