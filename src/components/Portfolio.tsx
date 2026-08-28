@@ -7,7 +7,7 @@ import {
   ArrowDown, ArrowRight,
   ChevronLeft, ChevronRight, ChevronUp, Code2, ExternalLink,
   Github, GraduationCap, Linkedin, Mail, MapPin, Menu, Phone, Play,
-  Sparkles, X,
+  Moon, Sparkles, Sun, X,
 } from "lucide-react";
 import { certifications, skillGroups } from "@/data/portfolio";
 import { aiTutorDetails, bankersAlgorithmDetails, featuredProjects, weightBasedInventoryDetails } from "@/data/featuredProjects";
@@ -15,6 +15,7 @@ import { localizedActivities } from "@/data/localizedTimeline";
 import { Language, translations } from "@/data/translations";
 
 const nav = ["home", "about", "projects", "skills", "activities", "certifications", "contact"] as const;
+type Theme = "light" | "dark";
 const projectImages = Array.from({ length: 18 }, (_, index) => `/projects/fishy-app/${index + 1}.png`);
 const activityImages = Array.from({ length: 4 }, (_, index) => `/activities/it-empowering-day-${index + 1}.png`);
 const secondActivityImages = ["/activities/cyber-expo-1.png", "/activities/cyber-expo-2.jpg"];
@@ -57,6 +58,7 @@ export default function Portfolio() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [active, setActive] = useState("home");
   const [language, setLanguage] = useState<Language>("en");
+  const [theme, setTheme] = useState<Theme>("dark");
   const [certificate, setCertificate] = useState<(typeof certifications)[number] | null>(null);
   const [projectIndex, setProjectIndex] = useState(0);
   const [projectDirection, setProjectDirection] = useState<-1 | 1>(1);
@@ -104,12 +106,29 @@ export default function Portfolio() {
       document.documentElement.lang = savedLanguage;
       languageTimer = window.setTimeout(() => setLanguage(savedLanguage), 0);
     }
+    const initialTheme = document.documentElement.dataset.theme;
+    let themeTimer: number | undefined;
+    if (initialTheme === "light" || initialTheme === "dark") {
+      themeTimer = window.setTimeout(() => setTheme(initialTheme), 0);
+    }
+    const systemTheme = window.matchMedia("(prefers-color-scheme: dark)");
+    const onSystemThemeChange = (event: MediaQueryListEvent) => {
+      const savedTheme = localStorage.getItem("portfolio-theme");
+      if (savedTheme === "light" || savedTheme === "dark") return;
+      const nextTheme: Theme = event.matches ? "dark" : "light";
+      document.documentElement.dataset.theme = nextTheme;
+      document.documentElement.style.colorScheme = nextTheme;
+      setTheme(nextTheme);
+    };
+    systemTheme.addEventListener("change", onSystemThemeChange);
     const onScroll = () => setScrolled(window.scrollY > 20);
     onScroll(); window.addEventListener("scroll", onScroll);
     const observer = new IntersectionObserver(entries => entries.forEach(entry => entry.isIntersecting && setActive(entry.target.id)), { rootMargin: "-35% 0px -55%", threshold: 0 });
     nav.forEach(item => { const el = document.getElementById(item); if (el) observer.observe(el); });
     return () => {
       if (languageTimer !== undefined) window.clearTimeout(languageTimer);
+      if (themeTimer !== undefined) window.clearTimeout(themeTimer);
+      systemTheme.removeEventListener("change", onSystemThemeChange);
       window.removeEventListener("scroll", onScroll);
       observer.disconnect();
     };
@@ -168,6 +187,14 @@ export default function Portfolio() {
     document.documentElement.lang = nextLanguage;
   };
 
+  const toggleTheme = () => {
+    const nextTheme: Theme = theme === "dark" ? "light" : "dark";
+    setTheme(nextTheme);
+    localStorage.setItem("portfolio-theme", nextTheme);
+    document.documentElement.dataset.theme = nextTheme;
+    document.documentElement.style.colorScheme = nextTheme;
+  };
+
   const changePreview = (direction: -1 | 1) => {
     const total = projectImages.length;
     setProjectDirection(direction);
@@ -193,6 +220,13 @@ export default function Portfolio() {
         {nav.map(item => <a key={item} className={active === item ? "active" : ""} href={`#${item}`}>{t.nav[item]}</a>)}
       </nav>
       <div className="language-switch" role="group" aria-label={t.ui.selectLanguage}><button className={language === "th" ? "selected" : ""} onClick={() => changeLanguage("th")}>TH</button><button className={language === "en" ? "selected" : ""} onClick={() => changeLanguage("en")}>EN</button></div>
+      <button className="theme-toggle" onClick={toggleTheme} aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"} title={theme === "dark" ? "Light mode" : "Dark mode"}>
+        <AnimatePresence mode="wait" initial={false}>
+          <motion.span key={theme} initial={{ opacity: 0, rotate: -35, scale: .7 }} animate={{ opacity: 1, rotate: 0, scale: 1 }} exit={{ opacity: 0, rotate: 35, scale: .7 }} transition={{ duration: .16 }}>
+            {theme === "dark" ? <Sun /> : <Moon />}
+          </motion.span>
+        </AnimatePresence>
+      </button>
       <button className="menu-button" onClick={() => setMenuOpen(!menuOpen)} aria-label={t.ui.toggleNavigation} aria-expanded={menuOpen}>{menuOpen ? <X /> : <Menu />}</button>
       <AnimatePresence>{menuOpen && <motion.div className="mobile-nav" initial={{ opacity: 0, y: -12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -12 }}>{nav.map(item => <a key={item} href={`#${item}`} onClick={() => setMenuOpen(false)}>{t.nav[item]}</a>)}<div className="mobile-language"><button onClick={() => changeLanguage("th")}>ภาษาไทย</button><button onClick={() => changeLanguage("en")}>{language === "th" ? "ภาษาอังกฤษ" : "English"}</button></div></motion.div>}</AnimatePresence>
     </header>
